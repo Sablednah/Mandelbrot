@@ -116,7 +116,7 @@ public class MandelbrotCommandExecutor implements CommandExecutor {
 					}
 					changeY=startY+mY;
 					
-					if(iteration<150) {
+					if(iteration<max_iteration) {
 						colour = (iteration % 15);
 					} else {
 						colour = 15;
