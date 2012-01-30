@@ -1,0 +1,10 @@
+name: Mandelbrot
+main: me.sablednah.Mandelbrot.Mandelbrot
+version: 1.0
+description: >
+             Mandelbrot!
+
+commands:
+    Mandelbrot:
+        description: Plot a Mandelbrot set
+        usage: /<command> <width> <height>
