@@ -53,21 +53,42 @@ public class MandelbrotCommandExecutor implements CommandExecutor {
 			Block blockStart = playa.getTargetBlock(null, 200);
 			
 			if (blockStart.equals(Material.AIR)) {
-				sender.sendMessage(ChatColor.RED + "["+myName+"] Look at bottom left first...");
+				if (args.length <3) {
+					sender.sendMessage(ChatColor.RED + "["+myName+"] Look at middle first...");
+				} else {
+					sender.sendMessage(ChatColor.RED + "["+myName+"] Look at bottom left first...");					
+				}
 				return true;				
 			}
 			
-			int startX, startY, startZ;
+			int startX = 0, startY = 0, startZ = 0;
 			int changeX = 0, changeY = 0, changeZ = 0;
 			
 			String playerOrdinal=ordinal(playa);
-			
+			playa.sendMessage(playerOrdinal);
 			Location locStart = blockStart.getLocation();
 			World w = locStart.getWorld();
 			
-			startX=locStart.getBlockX();
-			startY=locStart.getBlockY();
-			startZ=locStart.getBlockZ();
+			if (args.length <3) {  //flat!
+				if (playerOrdinal=="East") { 
+					startZ=locStart.getBlockZ()-(plotHeight/2);
+					startX=locStart.getBlockX()-(plotWidth/2);					
+				} else if (playerOrdinal=="West") { 
+					startZ=locStart.getBlockZ()-(plotHeight/2);
+					startX=locStart.getBlockX()-(plotWidth/2);					
+				} else if (playerOrdinal=="South") { 
+					startZ=locStart.getBlockZ()-(plotWidth/2);
+					startX=locStart.getBlockX()-(plotHeight/2);
+				} else if (playerOrdinal=="North") { 
+					startZ=locStart.getBlockZ()-(plotWidth/2);
+					startX=locStart.getBlockX()-(plotHeight/2);
+				}
+				startY=locStart.getBlockY()+1;
+			} else {
+				startY=locStart.getBlockY();
+				startX=locStart.getBlockX();
+				startZ=locStart.getBlockZ();				
+			}
 			
 			//ok time to plot the brot!
 			double x0, y0, x, y, xScale, yScale, xtemp;
@@ -101,20 +122,38 @@ public class MandelbrotCommandExecutor implements CommandExecutor {
 					//plot(mX,My,color);
 					//now the hard bit - lol - time to change the blocks!  remember y=altitude!!
 					
-					if (playerOrdinal=="East") { 
-						changeX=startX+mX;
-						changeZ=startZ;						
-					} else if (playerOrdinal=="West") { 
-						changeX=startX-mX;
-						changeZ=startZ;						
-					} else if (playerOrdinal=="South") { 
-						changeX=startX;
-						changeZ=startZ+mX;
-					} else if (playerOrdinal=="North") { 
-						changeX=startX;
-						changeZ=startZ-mX;
+					if (args.length <3) {
+						//flat!
+						if (playerOrdinal=="East") { 
+							changeX=startX+mX;
+							changeZ=startZ+mY;						
+						} else if (playerOrdinal=="West") { 
+							changeX=startX+mX;
+							changeZ=startZ+mY;						
+						} else if (playerOrdinal=="South") { 
+							changeX=startX+mY;
+							changeZ=startZ+mX;
+						} else if (playerOrdinal=="North") { 
+							changeX=startX+mY;
+							changeZ=startZ+mX;
+						}
+						changeY=startY;
+					} else {
+						if (playerOrdinal=="East") { 
+							changeX=startX+mX;
+							changeZ=startZ;						
+						} else if (playerOrdinal=="West") { 
+							changeX=startX-mX;
+							changeZ=startZ;						
+						} else if (playerOrdinal=="South") { 
+							changeX=startX;
+							changeZ=startZ+mX;
+						} else if (playerOrdinal=="North") { 
+							changeX=startX;
+							changeZ=startZ-mX;
+						}
+						changeY=startY+mY;
 					}
-					changeY=startY+mY;
 					
 					if(iteration<max_iteration) {
 						colour = (iteration % 15);

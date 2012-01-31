@@ -1,6 +1,6 @@
 /**
  * @author	sable <darren.douglas@gmail.com>
- * @version	0.1
+ * @version	1.1
  * 
  */
 package me.sablednah.Mandelbrot;
